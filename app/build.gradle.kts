@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -18,15 +20,40 @@ android {
         ndk { abiFilters += "arm64-v8a" }
     }
 
+    // A real keystore in signing/ signs every build type when it is present, so the
+    // very first install is already release-signed and a later update can never hit
+    // INSTALL_FAILED_UPDATE_INCOMPATIBLE. It is gitignored, and there is no fallback:
+    // a fresh clone builds an unsigned release APK, which will not install anywhere.
+    val signingPropertiesFile = rootProject.file("signing/signing.properties")
+    val realSigningConfig = if (signingPropertiesFile.isFile) {
+        val signingProperties = Properties().apply {
+            signingPropertiesFile.inputStream().use(::load)
+        }
+        signingConfigs.create("real") {
+            storeFile = rootProject.file("signing/signing.keystore")
+            storePassword = signingProperties.getProperty("STORE_PASSWORD")
+            keyAlias = signingProperties.getProperty("KEY_ALIAS")
+            keyPassword = signingProperties.getProperty("KEY_PASSWORD")
+        }
+    } else {
+        null
+    }
+
     buildTypes {
         getByName("debug") {
             isMinifyEnabled = false
+            realSigningConfig?.let { signingConfig = it }
         }
         getByName("release") {
             isMinifyEnabled = false
-            // Debug-signed so the release APK is directly sideloadable
-            signingConfig = signingConfigs.getByName("debug")
+            realSigningConfig?.let { signingConfig = it }
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+            // AGP stamps the git revision into META-INF; keep it out so the same
+            // version built in different places has the same contents.
+            vcsInfo {
+                include = false
+            }
         }
     }
 
