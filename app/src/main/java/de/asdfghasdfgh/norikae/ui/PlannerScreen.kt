@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.outlined.Subway
 import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material.icons.outlined.Train
 import androidx.compose.material.icons.outlined.Tram
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -47,6 +49,7 @@ import de.asdfghasdfgh.norikae.api.toPlanTime
 import com.mudita.mmd.components.buttons.OutlinedButtonMMD
 import com.mudita.mmd.components.divider.HorizontalDividerMMD
 import com.mudita.mmd.components.text.TextMMD
+import com.mudita.mmd.components.top_app_bar.TopAppBarMMD
 
 private enum class PickTarget { From, To }
 
@@ -153,6 +156,7 @@ private fun placeSublabel(match: GeoMatch, stopLabel: String, addressLabel: Stri
     return listOfNotNull(type, match.city).joinToString(", ").ifBlank { null }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PlannerContent(
     viewModel: TransitViewModel,
@@ -161,70 +165,80 @@ private fun PlannerContent(
     onPickTime: () -> Unit,
     onSelectTrip: (Itinerary) -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
-        Spacer(modifier = Modifier.height(16.dp))
+    Column(modifier = Modifier.fillMaxSize()) {
+        // The main screen's bar, as in the other apps; the screens pushed from it
+        // bring their own bar with a back arrow.
+        TopAppBarMMD(
+            title = { TextMMD(stringResource(R.string.app_name)) },
+            // MainActivity already pads the safe drawing insets.
+            windowInsets = WindowInsets(0, 0, 0, 0),
+        )
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButtonMMD(onClick = onPickFrom, modifier = Modifier.fillMaxWidth()) {
-                    TextMMD(viewModel.fromPlace?.name ?: stringResource(R.string.from), fontSize = 16.sp)
+        Column(modifier = Modifier.weight(1f).fillMaxWidth().padding(horizontal = 16.dp)) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButtonMMD(onClick = onPickFrom, modifier = Modifier.fillMaxWidth()) {
+                        TextMMD(viewModel.fromPlace?.name ?: stringResource(R.string.from), fontSize = 16.sp)
+                    }
+                    OutlinedButtonMMD(onClick = onPickTo, modifier = Modifier.fillMaxWidth()) {
+                        TextMMD(viewModel.toPlace?.name ?: stringResource(R.string.to), fontSize = 16.sp)
+                    }
                 }
-                OutlinedButtonMMD(onClick = onPickTo, modifier = Modifier.fillMaxWidth()) {
-                    TextMMD(viewModel.toPlace?.name ?: stringResource(R.string.to), fontSize = 16.sp)
+                IconButton(onClick = viewModel::swapPlaces) {
+                    Icon(
+                        imageVector = Icons.Outlined.SwapVert,
+                        contentDescription = stringResource(R.string.cd_swap),
+                    )
                 }
             }
-            IconButton(onClick = viewModel::swapPlaces) {
-                Icon(
-                    imageVector = Icons.Outlined.SwapVert,
-                    contentDescription = stringResource(R.string.cd_swap),
-                )
-            }
-        }
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButtonMMD(onClick = viewModel::toggleArriveBy) {
-                TextMMD(
-                    stringResource(if (viewModel.arriveBy) R.string.arrive else R.string.leave),
-                    fontSize = 16.sp,
-                )
-            }
-            OutlinedButtonMMD(onClick = onPickTime, modifier = Modifier.weight(1f)) {
-                TextMMD(viewModel.departAt.planLabel(), fontSize = 16.sp)
-            }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        PrimaryButtonMMD(
-            onClick = viewModel::planTrip,
-            enabled = viewModel.fromPlace != null && viewModel.toPlace != null && !viewModel.isPlanning,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            TextMMD(
-                stringResource(if (viewModel.isPlanning) R.string.planning else R.string.plan_trip),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-            )
-        }
-
-        viewModel.planError?.let {
             Spacer(modifier = Modifier.height(8.dp))
-            TextMMD(stringResource(R.string.plan_error, it))
-        }
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        MonoLazyColumn(contentPadding = PaddingValues(vertical = 8.dp), modifier = Modifier.weight(1f)) {
-            items(viewModel.trips.size) { index ->
-                val itinerary = viewModel.trips[index]
-                ItineraryRow(itinerary, onClick = { onSelectTrip(itinerary) })
-                if (index < viewModel.trips.lastIndex) HorizontalDividerMMD()
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButtonMMD(onClick = viewModel::toggleArriveBy) {
+                    TextMMD(
+                        stringResource(if (viewModel.arriveBy) R.string.arrive else R.string.leave),
+                        fontSize = 16.sp,
+                    )
+                }
+                OutlinedButtonMMD(onClick = onPickTime, modifier = Modifier.weight(1f)) {
+                    TextMMD(viewModel.departAt.planLabel(), fontSize = 16.sp)
+                }
             }
-        }
 
-        AttributionFooter()
+            Spacer(modifier = Modifier.height(8.dp))
+
+            PrimaryButtonMMD(
+                onClick = viewModel::planTrip,
+                enabled = viewModel.fromPlace != null && viewModel.toPlace != null && !viewModel.isPlanning,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                TextMMD(
+                    stringResource(if (viewModel.isPlanning) R.string.planning else R.string.plan_trip),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+
+            viewModel.planError?.let {
+                Spacer(modifier = Modifier.height(8.dp))
+                TextMMD(stringResource(R.string.plan_error, it))
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            MonoLazyColumn(contentPadding = PaddingValues(vertical = 8.dp), modifier = Modifier.weight(1f)) {
+                items(viewModel.trips.size) { index ->
+                    val itinerary = viewModel.trips[index]
+                    ItineraryRow(itinerary, onClick = { onSelectTrip(itinerary) })
+                    if (index < viewModel.trips.lastIndex) HorizontalDividerMMD()
+                }
+            }
+
+            AttributionFooter()
+        }
     }
 }
 
