@@ -14,7 +14,9 @@ android {
         applicationId = "de.asdfghasdfgh.norikae"
         minSdk = 28
         targetSdk = 35
-        versionCode = 13
+        // versionCode packs the release tag: major * 10_000_000 + minor * 10_000 + patch.
+        // v0.1.0 -> 10000.
+        versionCode = 10_000
         versionName = "0.1.0"
         // MapLibre ships ~15 MB of native code per ABI; the Kompakt is arm64
         ndk { abiFilters += "arm64-v8a" }
