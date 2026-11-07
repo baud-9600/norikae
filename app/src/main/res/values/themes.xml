@@ -1,6 +1,6 @@
 <resources>
     <!-- MMD provides the composable theme; this is a minimal placeholder. -->
-    <style name="Theme.MonoTransit" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.Norikae" parent="android:Theme.Material.Light.NoActionBar">
         <!-- Dark system bar icons on the app's white background. targetSdk 35
              forces edge-to-edge on Android 15+, where the default light icons
              are white-on-white and disappear. -->

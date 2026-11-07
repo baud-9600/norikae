@@ -1,4 +1,4 @@
-package com.berend.transit.ui
+package de.asdfghasdfgh.norikae.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -37,13 +37,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.berend.transit.R
-import com.berend.transit.TransitViewModel
-import com.berend.transit.api.GeoMatch
-import com.berend.transit.api.Itinerary
-import com.berend.transit.api.PlanLeg
-import com.berend.transit.api.asClock
-import com.berend.transit.api.toPlanTime
+import de.asdfghasdfgh.norikae.R
+import de.asdfghasdfgh.norikae.TransitViewModel
+import de.asdfghasdfgh.norikae.api.GeoMatch
+import de.asdfghasdfgh.norikae.api.Itinerary
+import de.asdfghasdfgh.norikae.api.PlanLeg
+import de.asdfghasdfgh.norikae.api.asClock
+import de.asdfghasdfgh.norikae.api.toPlanTime
 import com.mudita.mmd.components.buttons.OutlinedButtonMMD
 import com.mudita.mmd.components.divider.HorizontalDividerMMD
 import com.mudita.mmd.components.text.TextMMD

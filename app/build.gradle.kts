@@ -5,21 +5,24 @@ plugins {
 }
 
 android {
-    namespace = "com.berend.transit"
+    namespace = "de.asdfghasdfgh.norikae"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.berend.transit"
+        applicationId = "de.asdfghasdfgh.norikae"
         minSdk = 28
         targetSdk = 35
-        versionCode = 11
-        versionName = "0.3.0"
+        versionCode = 12
+        versionName = "0.4.0"
         // MapLibre ships ~15 MB of native code per ABI; the Kompakt is arm64
         ndk { abiFilters += "arm64-v8a" }
     }
 
     buildTypes {
-        release {
+        getByName("debug") {
+            isMinifyEnabled = false
+        }
+        getByName("release") {
             isMinifyEnabled = false
             // Debug-signed so the release APK is directly sideloadable
             signingConfig = signingConfigs.getByName("debug")

@@ -1,7 +1,7 @@
-package com.berend.transit.ui
+package de.asdfghasdfgh.norikae.ui
 
-import com.berend.transit.api.LatLon
-import com.berend.transit.api.WalkStep
+import de.asdfghasdfgh.norikae.api.LatLon
+import de.asdfghasdfgh.norikae.api.WalkStep
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before

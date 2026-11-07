@@ -1,4 +1,4 @@
-package com.berend.transit.ui
+package de.asdfghasdfgh.norikae.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
@@ -29,12 +29,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.berend.transit.R
-import com.berend.transit.api.Itinerary
-import com.berend.transit.api.PlanLeg
-import com.berend.transit.api.PlanStop
-import com.berend.transit.api.asClock
-import com.berend.transit.api.toPlanTime
+import de.asdfghasdfgh.norikae.R
+import de.asdfghasdfgh.norikae.api.Itinerary
+import de.asdfghasdfgh.norikae.api.PlanLeg
+import de.asdfghasdfgh.norikae.api.PlanStop
+import de.asdfghasdfgh.norikae.api.asClock
+import de.asdfghasdfgh.norikae.api.toPlanTime
 import com.mudita.mmd.components.divider.HorizontalDividerMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.mudita.mmd.components.top_app_bar.TopAppBarMMD

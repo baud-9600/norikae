@@ -1,2 +1,2 @@
 # Gson reflection on API models
--keep class com.berend.transit.api.** { *; }
+-keep class de.asdfghasdfgh.norikae.api.** { *; }

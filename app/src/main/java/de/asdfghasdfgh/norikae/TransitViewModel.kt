@@ -1,4 +1,4 @@
-package com.berend.transit
+package de.asdfghasdfgh.norikae
 
 import android.app.Application
 import android.content.Context
@@ -7,9 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.berend.transit.api.GeoMatch
-import com.berend.transit.api.Itinerary
-import com.berend.transit.api.createTransitousApi
+import de.asdfghasdfgh.norikae.api.GeoMatch
+import de.asdfghasdfgh.norikae.api.Itinerary
+import de.asdfghasdfgh.norikae.api.createTransitousApi
 import com.google.gson.Gson
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter
 class TransitViewModel(application: Application) : AndroidViewModel(application) {
 
     private val transitous by lazy { createTransitousApi() }
-    private val prefs by lazy { application.getSharedPreferences("calmtransit", Context.MODE_PRIVATE) }
+    private val prefs by lazy { application.getSharedPreferences("norikae", Context.MODE_PRIVATE) }
 
     var fromPlace by mutableStateOf<GeoMatch?>(null)
     var toPlace by mutableStateOf<GeoMatch?>(null)

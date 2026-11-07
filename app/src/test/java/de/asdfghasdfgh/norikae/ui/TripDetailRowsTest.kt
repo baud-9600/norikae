@@ -1,7 +1,7 @@
-package com.berend.transit.ui
+package de.asdfghasdfgh.norikae.ui
 
-import com.berend.transit.api.Itinerary
-import com.berend.transit.api.PlanLeg
+import de.asdfghasdfgh.norikae.api.Itinerary
+import de.asdfghasdfgh.norikae.api.PlanLeg
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

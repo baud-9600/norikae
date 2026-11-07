@@ -1,11 +1,11 @@
-package com.berend.transit.ui
+package de.asdfghasdfgh.norikae.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.berend.transit.R
-import com.berend.transit.api.PlanLeg
-import com.berend.transit.api.asDayLabel
-import com.berend.transit.api.asPlanLabel
+import de.asdfghasdfgh.norikae.R
+import de.asdfghasdfgh.norikae.api.PlanLeg
+import de.asdfghasdfgh.norikae.api.asDayLabel
+import de.asdfghasdfgh.norikae.api.asPlanLabel
 import java.time.LocalDate
 import java.time.OffsetDateTime
 

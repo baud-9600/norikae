@@ -11,7 +11,7 @@
         android:roundIcon="@drawable/ic_launcher_mudita"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MonoTransit">
+        android:theme="@style/Theme.Norikae">
 
         <!-- adjustPan: resizing lets the keyboard squeeze LazyColumnMMD to a
              height its scrollbar cannot draw, crashing inside MMD -->

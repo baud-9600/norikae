@@ -1,4 +1,4 @@
-package com.berend.transit.ui
+package de.asdfghasdfgh.norikae.ui
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn

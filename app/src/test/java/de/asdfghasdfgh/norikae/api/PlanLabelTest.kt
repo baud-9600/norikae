@@ -1,4 +1,4 @@
-package com.berend.transit.api
+package de.asdfghasdfgh.norikae.api
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

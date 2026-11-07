@@ -1,6 +1,6 @@
-package com.berend.transit.api
+package de.asdfghasdfgh.norikae.api
 
-import com.berend.transit.BuildConfig
+import de.asdfghasdfgh.norikae.BuildConfig
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -43,7 +43,7 @@ fun createTransitousApi(): TransitousApi = Retrofit.Builder()
                         // Transitous policy: identify app, version and a contact method
                         .header(
                             "User-Agent",
-                            "MonoTransit/${BuildConfig.VERSION_NAME} (https://github.com/berendsliedrecht/MonoTransit; berendcsliedrecht@gmail.com)",
+                            "Norikae/${BuildConfig.VERSION_NAME} (https://github.com/baud-9600/norikae; mk@asdfghasdfgh.de)",
                         )
                         .build(),
                 )

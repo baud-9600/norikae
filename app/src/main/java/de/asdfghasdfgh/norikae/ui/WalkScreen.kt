@@ -1,4 +1,4 @@
-package com.berend.transit.ui
+package de.asdfghasdfgh.norikae.ui
 
 import android.Manifest
 import android.content.Context
@@ -56,9 +56,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.berend.transit.R
-import com.berend.transit.api.LatLon
-import com.berend.transit.api.PlanLeg
+import de.asdfghasdfgh.norikae.R
+import de.asdfghasdfgh.norikae.api.LatLon
+import de.asdfghasdfgh.norikae.api.PlanLeg
 import com.mudita.mmd.components.text.TextMMD
 import com.mudita.mmd.components.top_app_bar.TopAppBarMMD
 import org.maplibre.android.MapLibre

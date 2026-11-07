@@ -1,6 +1,10 @@
-# MonoTransit
+# 乗り換え norikae — Transit
 
-Door-to-door public transit planner for the Mudita Kompakt (e-ink), built with the Mudita Mindful Design (MMD) framework. Search stops or addresses, plan by departure or arrival time, and open a trip for a calm leg-by-leg overview with platform info. Tapping a walk leg opens a black-and-white map with the route, your GPS position, and step-by-step directions. No API key or account required.
+Door-to-door public transit planner for the Mudita Kompakt (e-ink), built with the Mudita Mindful Design (MMD) framework. Search stops or addresses, plan by departure or arrival time, and open a trip for a calm leg-by-leg overview with platform info. Tapping a walk leg opens a black-and-white map with the route, your GPS position, and step-by-step directions. No API key or account required. The app is available in English and German.
+
+*Norikae* is 乗り換え — the change from one line to the next, which is what a journey through a transit network is made of.
+
+A fork of [MonoTransit](https://github.com/berendsliedrecht/MonoTransit) by Berend Sliedrecht, renamed, given its own icon, and translated into German. The routing, the screens and the map are his work; this repository keeps the same MIT licence and credits below.
 
 Routing and geocoding are provided by [Transitous](https://transitous.org), a free, community-run service powered by [MOTIS](https://github.com/motis-project/motis). The walk map is rendered with [MapLibre](https://maplibre.org) from [OpenFreeMap](https://openfreemap.org) tiles (OpenStreetMap data); tile requests go to tiles.openfreemap.org. Your GPS position never leaves the device.
 
@@ -13,16 +17,24 @@ Routing and geocoding are provided by [Transitous](https://transitous.org), a fr
 ## Install
 
 ```
-./gradlew installDebug
+./gradlew installRelease
 ```
+
+The release APK is signed with the maintainer's own key, so it can be installed over an earlier build.
+
+## Name and language
+
+- *Norikae* (乗り換え) is Japanese for a transfer, the change from one train, tram or bus to the next. The app is a fork of MonoTransit, so the Japanese name follows the house convention of the other apps here.
+- English is the default resource set; German is in `app/src/main/res/values-de/`. Android picks German when the phone is set to German.
 
 ## Structure
 
 - `api/TransitousApi.kt`: Transitous (MOTIS) client: geocoding of stops/addresses and door-to-door planning
 - `TransitViewModel.kt`: app state, planning calls, persisted favorites and recent places
 - `ui/PlannerScreen.kt`: from/to/departure-time form and the compact results list
+- `ui/Labels.kt`: localized line names and day labels built from the string resources
 - `ui/TripDetailScreen.kt`: leg-by-leg trip overview with track chips
-- `ui/WalkScreen.kt`: walk map (MapLibre, monochrome style) with GPS position and turn-by-turn list
+- `ui/WalkScreen.kt`: walk map (MapLibre, monochrome style) with GPS position
 - `ui/WalkRoute.kt`: turn computation from the leg geometry (street grouping, bearings, distances)
 - `ui/SearchPicker.kt`: shared search list with favorites (star) and recents (long-press to remove)
 
@@ -31,7 +43,7 @@ Routing and geocoding are provided by [Transitous](https://transitous.org), a fr
 This app follows the [Transitous API guidelines](https://transitous.org/api/):
 
 - Open source under the [MIT license](LICENSE), non-commercial, and resource-light (a single request per user action, no polling or scraping).
-- Every request carries a `User-Agent` identifying the app, its version, this repository and a contact address (berendcsliedrecht@gmail.com).
+- Every request carries a `User-Agent` identifying the app, its version, this repository and a contact address (mk@asdfghasdfgh.de).
 - Only the public endpoint `https://api.transitous.org/api/` is used.
 
 ## Data attribution
@@ -41,7 +53,7 @@ This app follows the [Transitous API guidelines](https://transitous.org/api/):
 
 ## Support
 
-If you find this app useful, consider [sponsoring me](https://github.com/sponsors/berendsliedrecht).
+The original app is [MonoTransit](https://github.com/berendsliedrecht/MonoTransit). If you find it useful, consider [sponsoring its author](https://github.com/sponsors/berendsliedrecht).
 
 ## License
 

@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MonoTransit"
+rootProject.name = "norikae"
 include(":app")
