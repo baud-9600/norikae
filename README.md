@@ -16,6 +16,12 @@ Routing and geocoding are provided by [Transitous](https://transitous.org), a fr
 
 ## Install
 
+Download <https://github.com/baud-9600/norikae/releases/latest/download/norikae.apk> and sideload it.
+That address always points at the newest release, and every release publishes a `.sha256`
+beside the APK if you would rather check than trust.
+
+To build and install it yourself:
+
 ```
 ./gradlew installRelease
 ```
