@@ -19,9 +19,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.berend.transit.R
 import com.mudita.mmd.components.divider.HorizontalDividerMMD
 import com.mudita.mmd.components.search_bar.SearchBarDefaultsMMD
 import com.mudita.mmd.components.text.TextMMD
@@ -55,7 +57,7 @@ fun <T> SearchPicker(
                 IconButton(onClick = onDismiss) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.cd_back),
                     )
                 }
             },
@@ -91,7 +93,9 @@ fun <T> SearchPicker(
                         IconButton(onClick = { onToggleFavorite(entry.value) }) {
                             Icon(
                                 imageVector = if (entry.favorite) Icons.Filled.Star else Icons.Outlined.StarOutline,
-                                contentDescription = if (entry.favorite) "Remove favorite" else "Add favorite",
+                                contentDescription = stringResource(
+                                    if (entry.favorite) R.string.cd_remove_favorite else R.string.cd_add_favorite,
+                                ),
                             )
                         }
                     }

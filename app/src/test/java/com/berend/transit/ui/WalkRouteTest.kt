@@ -4,9 +4,24 @@ import com.berend.transit.api.LatLon
 import com.berend.transit.api.WalkStep
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
+import java.util.Locale
 
 class WalkRouteTest {
+
+    private var locale: Locale = Locale.getDefault()
+
+    @Before
+    fun pinLocale() {
+        locale = Locale.getDefault()
+        Locale.setDefault(Locale.ENGLISH)
+    }
+
+    @org.junit.After
+    fun restoreLocale() {
+        Locale.setDefault(locale)
+    }
 
     private fun segment(street: String?, vararg points: LatLon, meters: Double = 100.0) =
         WalkSegment(street, meters, points.toList())

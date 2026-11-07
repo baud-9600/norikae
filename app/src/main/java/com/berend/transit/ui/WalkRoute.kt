@@ -94,8 +94,12 @@ internal fun nearestSegmentIndex(segments: List<WalkSegment>, fix: LatLon): Int 
         .minByOrNull { (_, segment) -> segment.points.minOfOrNull { haversineMeters(it, fix) } ?: Double.MAX_VALUE }
         ?.index ?: 0
 
-/** "80 m", "240 m" (nearest 10), "1.4 km" from a kilometre up. */
+/** "80 m", "240 m" (nearest 10), "1.4 km" from a kilometre up, in the phone's number format. */
 internal fun distanceLabel(meters: Int): String {
     val rounded = if (meters >= 100) (meters + 5) / 10 * 10 else meters
-    return if (rounded >= 1000) String.format(Locale.ENGLISH, "%.1f km", rounded / 1000.0) else "$rounded m"
+    return if (rounded >= 1000) {
+        String.format(Locale.getDefault(), "%.1f km", rounded / 1000.0)
+    } else {
+        "$rounded m"
+    }
 }

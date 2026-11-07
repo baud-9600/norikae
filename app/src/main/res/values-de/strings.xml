@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Der Name unter dem Symbol und überall, wo von der App gesprochen wird. -->
+    <string name="app_name">Fahrplan</string>
+
+    <!-- Planer -->
+    <string name="from">Von</string>
+    <string name="to">Nach</string>
+    <string name="from_hint">Start-Haltestelle oder Adresse</string>
+    <string name="to_hint">Ziel-Haltestelle oder Adresse</string>
+    <string name="cd_swap">Start und Ziel tauschen</string>
+    <string name="arrive">Ankunft</string>
+    <string name="leave">Abfahrt</string>
+    <string name="leave_now">jetzt</string>
+    <string name="plan_trip">Verbindung suchen</string>
+    <string name="planning">Suche läuft…</string>
+    <string name="plan_error">Fehler: %1$s</string>
+    <string name="plan_failed">Die Verbindungssuche ist fehlgeschlagen</string>
+    <string name="favorite">Favorit</string>
+    <string name="recent">Zuletzt</string>
+    <string name="stop">Haltestelle</string>
+    <string name="address">Adresse</string>
+    <string name="duration_short">%1$d:%2$02d</string>
+    <string name="track">Gleis %1$s</string>
+    <string name="no_transfers">ohne Umstieg</string>
+    <plurals name="transfers">
+        <item quantity="one">%1$d Umstieg</item>
+        <item quantity="other">%1$d Umstiege</item>
+    </plurals>
+    <string name="trip_summary">%1$d Std. %2$d Min., %3$s</string>
+    <string name="trip_headsign">%1$s nach %2$s</string>
+    <string name="walk_minutes">Fußweg %1$d Min.</string>
+    <string name="cd_walk_directions">Wegbeschreibung</string>
+    <string name="cancelled">Fällt aus</string>
+    <string name="attribution">Routing: Transitous, transitous.org/sources\n© OpenStreetMap-Mitwirkende</string>
+
+    <!-- Haltestellen und Adressen in der Suchliste -->
+    <string name="cd_back">Zurück</string>
+    <string name="cd_add_favorite">Zu Favoriten hinzufügen</string>
+    <string name="cd_remove_favorite">Aus Favoriten entfernen</string>
+
+    <!-- Auswahl von Datum und Uhrzeit -->
+    <string name="travel_time">Reisezeit</string>
+    <string name="now">Jetzt</string>
+    <string name="set">Setzen</string>
+    <string name="date">Datum</string>
+    <string name="today">Heute</string>
+    <string name="tomorrow">Morgen</string>
+    <string name="date_pattern">EEE d MMM</string>
+
+    <!-- Karte für den Fußweg -->
+    <string name="distance_to">%1$s bis %2$s</string>
+    <string name="to_destination">bis %1$s</string>
+    <string name="cd_my_location">Mein Standort</string>
+    <plurals name="gps_searching">
+        <item quantity="one">GPS-Suche, %1$d Satellit</item>
+        <item quantity="other">GPS-Suche, %1$d Satelliten</item>
+    </plurals>
+
+    <!-- Liniennamen, aus der Verkehrsmittelart und der Liniennummer gebildet -->
+    <string name="mode_bus">Bus %1$s</string>
+    <string name="mode_tram">Tram %1$s</string>
+    <string name="mode_subway">U-Bahn %1$s</string>
+    <string name="mode_ferry">Fähre %1$s</string>
+    <string name="mode_train">Zug</string>
+</resources>

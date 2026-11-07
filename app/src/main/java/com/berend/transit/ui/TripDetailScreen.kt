@@ -23,10 +23,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.berend.transit.R
 import com.berend.transit.api.Itinerary
 import com.berend.transit.api.PlanLeg
 import com.berend.transit.api.PlanStop
@@ -79,7 +82,7 @@ fun TripDetailScreen(itinerary: Itinerary, onBack: () -> Unit, onWalk: (PlanLeg)
                 IconButton(onClick = onBack) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.cd_back),
                     )
                 }
             },
@@ -95,21 +98,28 @@ fun TripDetailScreen(itinerary: Itinerary, onBack: () -> Unit, onWalk: (PlanLeg)
         MonoLazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
             item {
                 val minutes = itinerary.duration / 60
-                val transfers = when (itinerary.transfers) {
-                    0 -> "no transfers"
-                    1 -> "1 transfer"
-                    else -> "${itinerary.transfers} transfers"
+                val transfers = if (itinerary.transfers == 0) {
+                    stringResource(R.string.no_transfers)
+                } else {
+                    pluralStringResource(R.plurals.transfers, itinerary.transfers, itinerary.transfers)
                 }
                 DetailRow {
-                    TextMMD("${minutes / 60} h ${minutes % 60} min, $transfers", fontSize = 14.sp)
+                    TextMMD(
+                        stringResource(R.string.trip_summary, minutes / 60, minutes % 60, transfers),
+                        fontSize = 14.sp,
+                    )
                 }
             }
             items(rows.size) { index ->
                 when (val row = rows[index]) {
                     is HeaderRow -> DetailRow {
-                        val headsign = row.leg.headsign?.takeIf { it.isNotBlank() }?.let { " to $it" }.orEmpty()
+                        val label = row.leg.displayLabel()
+                        val headsign = row.leg.headsign
+                            ?.takeIf { it.isNotBlank() }
+                            ?.let { stringResource(R.string.trip_headsign, label, it) }
+                            ?: label
                         TextMMD(
-                            text = "${row.leg.label}$headsign",
+                            text = headsign,
                             fontSize = 17.sp,
                             fontWeight = FontWeight.Bold,
                             maxLines = 2,
@@ -128,11 +138,15 @@ fun TripDetailScreen(itinerary: Itinerary, onBack: () -> Unit, onWalk: (PlanLeg)
                                 .fillMaxSize()
                                 .clickable(enabled = navigable) { onWalk(row.leg) },
                         ) {
-                            TextMMD("Walk ${row.minutes} min", fontSize = 14.sp, modifier = Modifier.weight(1f))
+                            TextMMD(
+                                stringResource(R.string.walk_minutes, row.minutes),
+                                fontSize = 14.sp,
+                                modifier = Modifier.weight(1f),
+                            )
                             if (navigable) {
                                 Icon(
                                     imageVector = Icons.Outlined.ChevronRight,
-                                    contentDescription = "Walk directions",
+                                    contentDescription = stringResource(R.string.cd_walk_directions),
                                 )
                             }
                         }
@@ -175,7 +189,7 @@ private fun StopDetail(time: String?, scheduledTime: String?, stop: PlanStop?) {
         Column(modifier = Modifier.weight(1f)) {
             TextMMD(stop?.name.orEmpty(), fontSize = 16.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (stop?.cancelled == true) {
-                TextMMD("Cancelled", fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                TextMMD(stringResource(R.string.cancelled), fontSize = 14.sp, fontWeight = FontWeight.Bold)
             }
         }
         stop?.track?.let { TrackChip(it) }
@@ -185,7 +199,7 @@ private fun StopDetail(time: String?, scheduledTime: String?, stop: PlanStop?) {
 @Composable
 private fun TrackChip(track: String) {
     TextMMD(
-        text = "Track $track",
+        text = stringResource(R.string.track, track),
         fontSize = 14.sp,
         fontWeight = FontWeight.Black,
         modifier = Modifier

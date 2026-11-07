@@ -135,7 +135,7 @@ class TransitViewModel(application: Application) : AndroidViewModel(application)
                         else response.itineraries
                 }
                 .onFailure {
-                    planError = it.message ?: "Trip planning failed"
+                    planError = it.message ?: getApplication<Application>().getString(R.string.plan_failed)
                     trips = emptyList()
                 }
             isPlanning = false

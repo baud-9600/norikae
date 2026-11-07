@@ -31,16 +31,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.berend.transit.R
 import com.berend.transit.TransitViewModel
 import com.berend.transit.api.GeoMatch
 import com.berend.transit.api.Itinerary
 import com.berend.transit.api.PlanLeg
 import com.berend.transit.api.asClock
-import com.berend.transit.api.asPlanLabel
 import com.berend.transit.api.toPlanTime
 import com.mudita.mmd.components.buttons.OutlinedButtonMMD
 import com.mudita.mmd.components.divider.HorizontalDividerMMD
@@ -90,19 +92,36 @@ fun PlannerScreen(viewModel: TransitViewModel) {
         val results = viewModel.placeResults
             .filter { query.isNotBlank() }
             .filterNot { r -> (favorites + recents).any { it.name == r.name && it.city == r.city } }
+        val favoriteLabel = stringResource(R.string.favorite)
+        val recentLabel = stringResource(R.string.recent)
+        val stopLabel = stringResource(R.string.stop)
+        val addressLabel = stringResource(R.string.address)
         SearchPicker(
-            placeholder = if (pick == PickTarget.From) "From stop or address" else "To stop or address",
+            placeholder = stringResource(if (pick == PickTarget.From) R.string.from_hint else R.string.to_hint),
             query = query,
             onQueryChange = {
                 query = it
                 viewModel.searchPlaces(it)
             },
             entries = favorites.map { match ->
-                PickerEntry(match.name.orEmpty(), listOfNotNull("Favorite", match.city).joinToString(", "), match, favorite = true)
+                PickerEntry(
+                    match.name.orEmpty(),
+                    listOfNotNull(favoriteLabel, match.city).joinToString(", "),
+                    match,
+                    favorite = true,
+                )
             } + recents.map { match ->
-                PickerEntry(match.name.orEmpty(), listOfNotNull("Recent", match.city).joinToString(", "), match)
+                PickerEntry(
+                    match.name.orEmpty(),
+                    listOfNotNull(recentLabel, match.city).joinToString(", "),
+                    match,
+                )
             } + results.map { match ->
-                PickerEntry(match.name.orEmpty(), placeSublabel(match), match)
+                PickerEntry(
+                    match.name.orEmpty(),
+                    placeSublabel(match, stopLabel, addressLabel),
+                    match,
+                )
             },
             onSelect = { match ->
                 viewModel.addRecentPlace(match)
@@ -125,10 +144,10 @@ fun PlannerScreen(viewModel: TransitViewModel) {
     )
 }
 
-private fun placeSublabel(match: GeoMatch): String? {
+private fun placeSublabel(match: GeoMatch, stopLabel: String, addressLabel: String): String? {
     val type = when (match.type) {
-        "STOP" -> "Stop"
-        "ADDRESS" -> "Address"
+        "STOP" -> stopLabel
+        "ADDRESS" -> addressLabel
         else -> null
     }
     return listOfNotNull(type, match.city).joinToString(", ").ifBlank { null }
@@ -148,16 +167,16 @@ private fun PlannerContent(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButtonMMD(onClick = onPickFrom, modifier = Modifier.fillMaxWidth()) {
-                    TextMMD(viewModel.fromPlace?.name ?: "From", fontSize = 16.sp)
+                    TextMMD(viewModel.fromPlace?.name ?: stringResource(R.string.from), fontSize = 16.sp)
                 }
                 OutlinedButtonMMD(onClick = onPickTo, modifier = Modifier.fillMaxWidth()) {
-                    TextMMD(viewModel.toPlace?.name ?: "To", fontSize = 16.sp)
+                    TextMMD(viewModel.toPlace?.name ?: stringResource(R.string.to), fontSize = 16.sp)
                 }
             }
             IconButton(onClick = viewModel::swapPlaces) {
                 Icon(
                     imageVector = Icons.Outlined.SwapVert,
-                    contentDescription = "Swap from and to",
+                    contentDescription = stringResource(R.string.cd_swap),
                 )
             }
         }
@@ -166,10 +185,13 @@ private fun PlannerContent(
 
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedButtonMMD(onClick = viewModel::toggleArriveBy) {
-                TextMMD(if (viewModel.arriveBy) "Arrive" else "Leave", fontSize = 16.sp)
+                TextMMD(
+                    stringResource(if (viewModel.arriveBy) R.string.arrive else R.string.leave),
+                    fontSize = 16.sp,
+                )
             }
             OutlinedButtonMMD(onClick = onPickTime, modifier = Modifier.weight(1f)) {
-                TextMMD(viewModel.departAt?.asPlanLabel() ?: "now", fontSize = 16.sp)
+                TextMMD(viewModel.departAt.planLabel(), fontSize = 16.sp)
             }
         }
 
@@ -180,12 +202,16 @@ private fun PlannerContent(
             enabled = viewModel.fromPlace != null && viewModel.toPlace != null && !viewModel.isPlanning,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            TextMMD(if (viewModel.isPlanning) "Planning..." else "Plan trip", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            TextMMD(
+                stringResource(if (viewModel.isPlanning) R.string.planning else R.string.plan_trip),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+            )
         }
 
         viewModel.planError?.let {
             Spacer(modifier = Modifier.height(8.dp))
-            TextMMD("Error: $it")
+            TextMMD(stringResource(R.string.plan_error, it))
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -208,7 +234,7 @@ private fun PlannerContent(
 private fun AttributionFooter() {
     val context = LocalContext.current
     TextMMD(
-        text = "Routing: Transitous, transitous.org/sources\n© OpenStreetMap contributors",
+        text = stringResource(R.string.attribution),
         fontSize = 12.sp,
         textAlign = TextAlign.Center,
         modifier = Modifier
@@ -238,7 +264,7 @@ private fun ItineraryRow(itinerary: Itinerary, onClick: () -> Unit) {
             fontWeight = FontWeight.Bold,
         )
         LegSummary(itinerary, modifier = Modifier.weight(1f).padding(horizontal = 8.dp))
-        TextMMD("%d:%02d".format(minutes / 60, minutes % 60), fontSize = 16.sp)
+        TextMMD(stringResource(R.string.duration_short, minutes / 60, minutes % 60), fontSize = 16.sp)
     }
 }
 
@@ -257,14 +283,14 @@ private fun LegSummary(itinerary: Itinerary, modifier: Modifier = Modifier) {
                 if (index > 0) TextMMD("+", fontSize = 14.sp, modifier = Modifier.padding(horizontal = 3.dp))
                 Icon(
                     imageVector = legIcon(leg.mode),
-                    contentDescription = leg.label,
+                    contentDescription = leg.displayLabel(),
                     modifier = Modifier.size(20.dp),
                 )
                 // Trains: the departure track is more useful at a glance than
                 // the train's own ID ("EST 9381").
                 val name = when (leg.mode) {
                     "BUS", "TRAM", "SUBWAY", "FERRY" -> leg.routeShortName
-                    else -> leg.from?.track?.let { "Track $it" } ?: leg.routeShortName
+                    else -> leg.from?.track?.let { stringResource(R.string.track, it) } ?: leg.routeShortName
                 }
                 if (legs.size <= 2 && !name.isNullOrBlank()) {
                     TextMMD(
@@ -276,7 +302,11 @@ private fun LegSummary(itinerary: Itinerary, modifier: Modifier = Modifier) {
                 }
             }
         } else {
-            TextMMD("${itinerary.transfers} transfers", fontSize = 14.sp, maxLines = 1)
+            TextMMD(
+                pluralStringResource(R.plurals.transfers, itinerary.transfers, itinerary.transfers),
+                fontSize = 14.sp,
+                maxLines = 1,
+            )
         }
     }
 }

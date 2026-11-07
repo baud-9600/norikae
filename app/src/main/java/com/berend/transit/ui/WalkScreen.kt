@@ -47,6 +47,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -54,6 +56,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.berend.transit.R
 import com.berend.transit.api.LatLon
 import com.berend.transit.api.PlanLeg
 import com.mudita.mmd.components.text.TextMMD
@@ -105,13 +108,13 @@ fun WalkScreen(leg: PlanLeg, onBack: () -> Unit) {
                 IconButton(onClick = onBack) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.cd_back),
                     )
                 }
             },
             title = {
                 TextMMD(
-                    text = "Walk ${leg.duration / 60} min",
+                    text = stringResource(R.string.walk_minutes, leg.duration / 60),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                 )
@@ -120,9 +123,16 @@ fun WalkScreen(leg: PlanLeg, onBack: () -> Unit) {
 
         val meters = leg.distance?.roundToInt()
         val destination = leg.to?.name?.takeIf { it.isNotBlank() }
-        if (meters != null || destination != null) {
+        val distanceText = when {
+            meters != null && destination != null ->
+                stringResource(R.string.distance_to, distanceLabel(meters), destination)
+            meters != null -> distanceLabel(meters)
+            destination != null -> stringResource(R.string.to_destination, destination)
+            else -> null
+        }
+        if (distanceText != null) {
             TextMMD(
-                text = listOfNotNull(meters?.let(::distanceLabel), destination?.let { "to $it" }).joinToString(" "),
+                text = distanceText,
                 fontSize = 14.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -356,7 +366,7 @@ private fun WalkMap(points: List<LatLon>, gps: GpsState, modifier: Modifier = Mo
         AndroidView(factory = { mapView }, modifier = Modifier.fillMaxSize())
         if (location == null) {
             TextMMD(
-                text = "Searching GPS, ${gps.satellites} satellites",
+                text = pluralStringResource(R.plurals.gps_searching, gps.satellites, gps.satellites),
                 fontSize = 13.sp,
                 modifier = Modifier
                     .align(Alignment.TopStart)
@@ -381,7 +391,7 @@ private fun WalkMap(points: List<LatLon>, gps: GpsState, modifier: Modifier = Mo
             Icon(
                 // Searching until the first fix lands, then the filled-center icon
                 imageVector = if (location != null) Icons.Outlined.MyLocation else Icons.Outlined.LocationSearching,
-                contentDescription = "My location",
+                contentDescription = stringResource(R.string.cd_my_location),
                 modifier = Modifier.size(32.dp),
             )
         }

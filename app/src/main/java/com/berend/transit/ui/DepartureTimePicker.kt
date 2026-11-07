@@ -19,9 +19,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.berend.transit.api.asDayLabel
+import com.berend.transit.R
 import com.mudita.mmd.components.buttons.OutlinedButtonMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.mudita.mmd.components.time.DatePickerMMD
@@ -68,11 +69,11 @@ fun DepartureTimePicker(
                 IconButton(onClick = onDismiss) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.cd_back),
                     )
                 }
             },
-            title = { TextMMD("Travel time", fontSize = 20.sp) },
+            title = { TextMMD(stringResource(R.string.travel_time), fontSize = 20.sp) },
         )
 
         Column(
@@ -82,12 +83,12 @@ fun DepartureTimePicker(
             TimeInputMMD(state = timeState, modifier = Modifier.fillMaxWidth())
 
             OutlinedButtonMMD(onClick = { pickingDate = true }, modifier = Modifier.fillMaxWidth()) {
-                TextMMD(date.asDayLabel(), fontSize = 16.sp)
+                TextMMD(date.dayLabel(), fontSize = 16.sp)
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButtonMMD(onClick = { onConfirm(null) }, modifier = Modifier.weight(1f)) {
-                    TextMMD("Now", fontSize = 16.sp)
+                    TextMMD(stringResource(R.string.now), fontSize = 16.sp)
                 }
                 PrimaryButtonMMD(
                     onClick = {
@@ -99,7 +100,7 @@ fun DepartureTimePicker(
                     },
                     modifier = Modifier.weight(1f),
                 ) {
-                    TextMMD("Set", fontSize = 16.sp)
+                    TextMMD(stringResource(R.string.set), fontSize = 16.sp)
                 }
             }
         }
@@ -130,11 +131,11 @@ private fun DatePickerScreen(initial: LocalDate, onPick: (LocalDate) -> Unit, on
                 IconButton(onClick = onDismiss) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.cd_back),
                     )
                 }
             },
-            title = { TextMMD("Date", fontSize = 20.sp) },
+            title = { TextMMD(stringResource(R.string.date), fontSize = 20.sp) },
         )
 
         DatePickerMMD(state = state, title = null, headline = null, showModeToggle = false)

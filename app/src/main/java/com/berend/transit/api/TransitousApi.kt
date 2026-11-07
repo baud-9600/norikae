@@ -96,16 +96,6 @@ data class PlanLeg(
     val steps: List<WalkStep> = emptyList(), // walk legs only
 ) {
     val isTransit: Boolean get() = mode != "WALK"
-
-    /** "Bus 44", "Metro 51", or the train's own name ("Sprinter", "ECD 9563"). */
-    val label: String
-        get() = when (mode) {
-            "BUS" -> "Bus ${routeShortName.orEmpty()}".trim()
-            "TRAM" -> "Tram ${routeShortName.orEmpty()}".trim()
-            "SUBWAY" -> "Metro ${routeShortName.orEmpty()}".trim()
-            "FERRY" -> "Ferry ${routeShortName.orEmpty()}".trim()
-            else -> routeShortName ?: "Train"
-        }
 }
 
 data class PlanStop(
@@ -167,16 +157,31 @@ fun String?.toPlanTime(): OffsetDateTime? = this?.let {
 
 fun OffsetDateTime?.asClock(): String = this?.format(CLOCK) ?: "--:--"
 
-// English like the rest of the UI, regardless of device locale
-private val DAY: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE d MMM", Locale.ENGLISH)
-
-/** "Today", "Tomorrow" or "EEE d MMM". */
-fun LocalDate.asDayLabel(today: LocalDate = LocalDate.now()): String = when (this) {
-    today -> "Today"
-    today.plusDays(1) -> "Tomorrow"
-    else -> format(DAY)
+/**
+ * "Today", "Tomorrow" or a localized day and month. The two labels and the
+ * pattern come from the string resources, so the UI owns every word.
+ */
+fun LocalDate.asDayLabel(
+    today: LocalDate,
+    todayLabel: String,
+    tomorrowLabel: String,
+    pattern: String,
+    locale: Locale = Locale.getDefault(),
+): String = when (this) {
+    today -> todayLabel
+    today.plusDays(1) -> tomorrowLabel
+    else -> format(DateTimeFormatter.ofPattern(pattern, locale))
 }
 
 /** Clock time for today, day label plus clock otherwise. */
-fun OffsetDateTime.asPlanLabel(today: LocalDate = LocalDate.now()): String =
-    if (toLocalDate() == today) asClock() else "${toLocalDate().asDayLabel(today)} ${asClock()}"
+fun OffsetDateTime.asPlanLabel(
+    today: LocalDate,
+    todayLabel: String,
+    tomorrowLabel: String,
+    pattern: String,
+    locale: Locale = Locale.getDefault(),
+): String = if (toLocalDate() == today) {
+    asClock()
+} else {
+    "${toLocalDate().asDayLabel(today, todayLabel, tomorrowLabel, pattern, locale)} ${asClock()}"
+}

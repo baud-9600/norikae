@@ -1,3 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- The launcher label and the name everywhere the app is spoken of. -->
     <string name="app_name">Transit</string>
+
+    <!-- Planner -->
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="from_hint">From stop or address</string>
+    <string name="to_hint">To stop or address</string>
+    <string name="cd_swap">Swap from and to</string>
+    <string name="arrive">Arrive</string>
+    <string name="leave">Leave</string>
+    <string name="leave_now">now</string>
+    <string name="plan_trip">Plan trip</string>
+    <string name="planning">Planning…</string>
+    <string name="plan_error">Error: %1$s</string>
+    <string name="plan_failed">Trip planning failed</string>
+    <string name="favorite">Favorite</string>
+    <string name="recent">Recent</string>
+    <string name="stop">Stop</string>
+    <string name="address">Address</string>
+    <string name="duration_short">%1$d:%2$02d</string>
+    <string name="track">Track %1$s</string>
+    <string name="no_transfers">no transfers</string>
+    <plurals name="transfers">
+        <item quantity="one">%1$d transfer</item>
+        <item quantity="other">%1$d transfers</item>
+    </plurals>
+    <string name="trip_summary">%1$d h %2$d min, %3$s</string>
+    <string name="trip_headsign">%1$s to %2$s</string>
+    <string name="walk_minutes">Walk %1$d min</string>
+    <string name="cd_walk_directions">Walk directions</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="attribution">Routing: Transitous, transitous.org/sources\n© OpenStreetMap contributors</string>
+
+    <!-- Stop and address labels in the search list -->
+    <string name="cd_back">Back</string>
+    <string name="cd_add_favorite">Add favorite</string>
+    <string name="cd_remove_favorite">Remove favorite</string>
+
+    <!-- Travel time picker -->
+    <string name="travel_time">Travel time</string>
+    <string name="now">Now</string>
+    <string name="set">Set</string>
+    <string name="date">Date</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="date_pattern">EEE d MMM</string>
+
+    <!-- Walk map -->
+    <string name="distance_to">%1$s to %2$s</string>
+    <string name="to_destination">to %1$s</string>
+    <string name="cd_my_location">My location</string>
+    <plurals name="gps_searching">
+        <item quantity="one">Searching GPS, %1$d satellite</item>
+        <item quantity="other">Searching GPS, %1$d satellites</item>
+    </plurals>
+
+    <!-- Line names, built from the mode and the line's own number or name -->
+    <string name="mode_bus">Bus %1$s</string>
+    <string name="mode_tram">Tram %1$s</string>
+    <string name="mode_subway">Metro %1$s</string>
+    <string name="mode_ferry">Ferry %1$s</string>
+    <string name="mode_train">Train</string>
 </resources>
