@@ -18,6 +18,9 @@ import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+/** What the plan may use: everything, local transport only, or long-distance only. */
+enum class TransitFilter { All, Local, LongDistance }
+
 class TransitViewModel(application: Application) : AndroidViewModel(application) {
 
     private val transitous by lazy { createTransitousApi() }
@@ -27,9 +30,11 @@ class TransitViewModel(application: Application) : AndroidViewModel(application)
     var toPlace by mutableStateOf<GeoMatch?>(null)
     var departAt by mutableStateOf<OffsetDateTime?>(null); private set // null = leave now
     var arriveBy by mutableStateOf(false); private set
+    var transitFilter by mutableStateOf(TransitFilter.All); private set
     var trips by mutableStateOf<List<Itinerary>>(emptyList()); private set
     var isPlanning by mutableStateOf(false); private set
     var planError by mutableStateOf<String?>(null); private set
+    var hasPlanned by mutableStateOf(false); private set
 
     var placeResults by mutableStateOf<List<GeoMatch>>(emptyList()); private set
     var recentPlaces by mutableStateOf<List<GeoMatch>>(emptyList()); private set
@@ -39,6 +44,9 @@ class TransitViewModel(application: Application) : AndroidViewModel(application)
     init {
         recentPlaces = loadPlaces("recent_places")
         favoritePlaces = loadPlaces("favorite_places")
+        transitFilter = runCatching {
+            TransitFilter.valueOf(prefs.getString("transit_filter", "") ?: "")
+        }.getOrDefault(TransitFilter.All)
     }
 
     /** Remember a picked place; most recent first, deduplicated, persisted. */
@@ -75,6 +83,14 @@ class TransitViewModel(application: Application) : AndroidViewModel(application)
         val from = fromPlace
         fromPlace = toPlace
         toPlace = from
+    }
+
+    /** Set the local/long-distance filter and, when results are on screen, ask again. */
+    fun selectTransitFilter(filter: TransitFilter) {
+        if (filter == transitFilter) return
+        transitFilter = filter
+        prefs.edit().putString("transit_filter", filter.name).apply()
+        if (!isPlanning && (hasPlanned || trips.isNotEmpty()) && fromPlace != null && toPlace != null) planTrip()
     }
 
     /** Set an explicit planning time; null returns to "leave now". */
@@ -119,12 +135,14 @@ class TransitViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             isPlanning = true
             planError = null
+            hasPlanned = false
             runCatching {
                 transitous.plan(
                     from,
                     to,
                     time = departAt?.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
                     arriveBy = if (arriveBy) true else null,
+                    transitModes = transitFilter.transitModes(),
                 )
             }
                 .onSuccess { response ->
@@ -138,7 +156,22 @@ class TransitViewModel(application: Application) : AndroidViewModel(application)
                     planError = it.message ?: getApplication<Application>().getString(R.string.plan_failed)
                     trips = emptyList()
                 }
+            hasPlanned = true
             isPlanning = false
         }
     }
 }
+
+// MOTIS transitModes. "TRANSIT" is deliberately absent from both lists: it
+// expands to every mode, long-distance included. RAIL is absent for the same
+// reason; the local set names its regional and suburban parts instead.
+internal fun TransitFilter.transitModes(): String? = when (this) {
+    TransitFilter.All -> null
+    TransitFilter.Local -> LOCAL_TRANSIT_MODES
+    TransitFilter.LongDistance -> LONG_DISTANCE_TRANSIT_MODES
+}
+
+private const val LOCAL_TRANSIT_MODES =
+    "TRAM,SUBWAY,FERRY,BUS,REGIONAL_RAIL,SUBURBAN,FUNICULAR,AERIAL_LIFT,ODM,RIDE_SHARING,FLEX,OTHER"
+private const val LONG_DISTANCE_TRANSIT_MODES =
+    "HIGHSPEED_RAIL,LONG_DISTANCE,NIGHT_RAIL,COACH,AIRPLANE"

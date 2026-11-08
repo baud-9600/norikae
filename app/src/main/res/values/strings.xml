@@ -16,6 +16,10 @@
     <string name="planning">Planning…</string>
     <string name="plan_error">Error: %1$s</string>
     <string name="plan_failed">Trip planning failed</string>
+    <string name="no_results">No connections found.</string>
+    <string name="filter_all">All</string>
+    <string name="filter_local">Local</string>
+    <string name="filter_long_distance">Long-distance</string>
     <string name="favorite">Favorite</string>
     <string name="recent">Recent</string>
     <string name="stop">Stop</string>

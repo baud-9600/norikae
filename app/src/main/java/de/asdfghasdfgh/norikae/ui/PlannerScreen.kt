@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.asdfghasdfgh.norikae.R
+import de.asdfghasdfgh.norikae.TransitFilter
 import de.asdfghasdfgh.norikae.TransitViewModel
 import de.asdfghasdfgh.norikae.api.GeoMatch
 import de.asdfghasdfgh.norikae.api.Itinerary
@@ -210,6 +211,29 @@ private fun PlannerContent(
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                FilterButton(
+                    label = stringResource(R.string.filter_all),
+                    selected = viewModel.transitFilter == TransitFilter.All,
+                    modifier = Modifier.weight(1f),
+                    onClick = { viewModel.selectTransitFilter(TransitFilter.All) },
+                )
+                FilterButton(
+                    label = stringResource(R.string.filter_local),
+                    selected = viewModel.transitFilter == TransitFilter.Local,
+                    modifier = Modifier.weight(1f),
+                    onClick = { viewModel.selectTransitFilter(TransitFilter.Local) },
+                )
+                FilterButton(
+                    label = stringResource(R.string.filter_long_distance),
+                    selected = viewModel.transitFilter == TransitFilter.LongDistance,
+                    modifier = Modifier.weight(1f),
+                    onClick = { viewModel.selectTransitFilter(TransitFilter.LongDistance) },
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             PrimaryButtonMMD(
                 onClick = viewModel::planTrip,
                 enabled = viewModel.fromPlace != null && viewModel.toPlace != null && !viewModel.isPlanning,
@@ -227,6 +251,11 @@ private fun PlannerContent(
                 TextMMD(stringResource(R.string.plan_error, it))
             }
 
+            if (viewModel.hasPlanned && !viewModel.isPlanning && viewModel.planError == null && viewModel.trips.isEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                TextMMD(stringResource(R.string.no_results), fontSize = 14.sp)
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
 
             MonoLazyColumn(contentPadding = PaddingValues(vertical = 8.dp), modifier = Modifier.weight(1f)) {
@@ -238,6 +267,24 @@ private fun PlannerContent(
             }
 
             AttributionFooter()
+        }
+    }
+}
+
+@Composable
+private fun FilterButton(
+    label: String,
+    selected: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    if (selected) {
+        PrimaryButtonMMD(onClick = onClick, modifier = modifier) {
+            TextMMD(label, fontSize = 14.sp, maxLines = 1)
+        }
+    } else {
+        OutlinedButtonMMD(onClick = onClick, modifier = modifier) {
+            TextMMD(label, fontSize = 14.sp, maxLines = 1)
         }
     }
 }

@@ -16,6 +16,10 @@
     <string name="planning">Suche läuft…</string>
     <string name="plan_error">Fehler: %1$s</string>
     <string name="plan_failed">Die Verbindungssuche ist fehlgeschlagen</string>
+    <string name="no_results">Keine Verbindungen gefunden.</string>
+    <string name="filter_all">Alle</string>
+    <string name="filter_local">Nahverkehr</string>
+    <string name="filter_long_distance">Fernverkehr</string>
     <string name="favorite">Favorit</string>
     <string name="recent">Zuletzt</string>
     <string name="stop">Haltestelle</string>

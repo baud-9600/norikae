@@ -30,6 +30,8 @@ interface TransitousApi {
         @Query("numItineraries") numItineraries: Int = 5,
         @Query("time") time: String? = null,
         @Query("arriveBy") arriveBy: Boolean? = null,
+        // Comma-separated MOTIS modes; null keeps the server default (all transit)
+        @Query("transitModes") transitModes: String? = null,
     ): PlanResponse
 }
 
