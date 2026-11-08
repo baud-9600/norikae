@@ -2,17 +2,18 @@
 
 Door-to-door public transit planner for the Mudita Kompakt (e-ink), built with the Mudita Mindful Design (MMD) framework. Search stops or addresses, plan by departure or arrival time, and open a trip for a calm leg-by-leg overview with platform info. Tapping a walk leg opens a black-and-white map with the route, your GPS position, and step-by-step directions. No API key or account required. The app is available in English and German.
 
+The search can be narrowed to **local transport** (regional and suburban trains, subway, tram, bus, ferry) or to **long-distance** (high-speed, intercity and night trains, long-distance coaches, flights). This uses MOTIS's `transitModes` filter, so it changes what Transitous plans, not just what is shown afterwards; the choice is remembered on the phone.
+
 *Norikae* is 乗り換え — the change from one line to the next, which is what a journey through a transit network is made of.
 
 A fork of [MonoTransit](https://github.com/berendsliedrecht/MonoTransit) by Berend Sliedrecht, renamed, given its own icon, and translated into German. The routing, the screens and the map are his work; this repository keeps the same MIT licence and credits below.
 
 Routing and geocoding are provided by [Transitous](https://transitous.org), a free, community-run service powered by [MOTIS](https://github.com/motis-project/motis). The walk map is rendered with [MapLibre](https://maplibre.org) from [OpenFreeMap](https://openfreemap.org) tiles (OpenStreetMap data); tile requests go to tiles.openfreemap.org. Your GPS position never leaves the device.
 
-<p align="center">
-  <img src="docs/planner.png" width="30%" alt="Planner with results list">
-  <img src="docs/trip.png" width="30%" alt="Trip detail with platforms">
-  <img src="docs/picker.png" width="30%" alt="Stop and address search">
-</p>
+| | |
+|---|---|
+| ![The planner, with All / Local / Long-distance](docs/planner.png) | ![Long-distance only: IC and ICE connections](docs/filter.png) |
+| ![A trip, leg by leg with platforms](docs/trip.png) | ![Stop and address search](docs/picker.png) |
 
 ## Install
 
@@ -36,7 +37,7 @@ The release APK is signed with the maintainer's own key, so it can be installed 
 ## Structure
 
 - `api/TransitousApi.kt`: Transitous (MOTIS) client: geocoding of stops/addresses and door-to-door planning
-- `TransitViewModel.kt`: app state, planning calls, persisted favorites and recent places
+- `TransitViewModel.kt`: app state, planning calls, persisted favorites, recent places and the local/long-distance filter
 - `ui/PlannerScreen.kt`: from/to/departure-time form and the compact results list
 - `ui/Labels.kt`: localized line names and day labels built from the string resources
 - `ui/TripDetailScreen.kt`: leg-by-leg trip overview with track chips
